@@ -23,7 +23,7 @@ fn examples() {
 }
 
 #[test]
-fn answer() {
+fn input() {
     assert_eq!(run(&aoc::input!()), (66616, 199172));
 }
 
