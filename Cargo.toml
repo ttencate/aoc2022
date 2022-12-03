@@ -6,6 +6,7 @@ edition = "2021"
 
 [dependencies]
 aoc = { "path" = "aoc" }
+itertools = "0.10.5"
 
 [profile.release]
 # Enable debug information in release builds.
