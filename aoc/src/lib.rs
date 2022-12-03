@@ -134,7 +134,10 @@ fn fetch_examples(year: u32, day: u32) -> Result<usize, Box<dyn Error>> {
 }
 
 fn send_get_request(url: &str) -> Result<reqwest::blocking::Response, Box<dyn Error>> {
-    let client = reqwest::blocking::Client::new();
+    let client = reqwest::blocking::ClientBuilder::new()
+        .user_agent("aoc2022 by ttencate@gmail.com, https://github.com/ttencate/aoc2022.git")
+        .build()
+        .expect("failed to build client");
     let session_cookie = load_session_cookie()?;
     let response = client.get(url)
         .header(reqwest::header::COOKIE, format!("session={}", session_cookie))
