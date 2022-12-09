@@ -20,7 +20,6 @@ fn run(input: &str) -> (u64, u64) {
             ("dir", _) => {
             },
             (size, file_name) => {
-                dbg!(size, file_name);
                 file_sizes.insert(pwd.join(file_name), size.parse::<u64>().unwrap());
             },
         }
