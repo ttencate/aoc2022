@@ -1,3 +1,8 @@
+fn consume<'a>(iter: &mut impl Iterator<Item = &'a str>, expected: &str) {
+    let actual = iter.next();
+    debug_assert_eq!(actual, Some(expected));
+}
+
 fn run(input: &str) -> (String, String) {
     let mut lines = input.lines();
     let mut num_stacks = 0;
@@ -22,17 +27,18 @@ fn run(input: &str) -> (String, String) {
         stack.reverse();
     }
 
-    debug_assert_eq!(lines.next().unwrap(), "");
+    let blank_line = lines.next().unwrap();
+    debug_assert_eq!(blank_line, "");
 
     let mut part1_stacks = stacks.clone();
     let mut part2_stacks = stacks;
     for line in lines {
         let mut parts = line.split(' ');
-        debug_assert_eq!(parts.next().unwrap(), "move");
+        consume(&mut parts, "move");
         let count = parts.next().unwrap().parse::<usize>().unwrap();
-        debug_assert_eq!(parts.next().unwrap(), "from");
+        consume(&mut parts, "from");
         let from = parts.next().unwrap().parse::<usize>().unwrap() - 1;
-        debug_assert_eq!(parts.next().unwrap(), "to");
+        consume(&mut parts, "to");
         let to = parts.next().unwrap().parse::<usize>().unwrap() - 1;
 
         for _ in 0..count {
