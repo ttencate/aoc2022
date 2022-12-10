@@ -1,5 +1,4 @@
 use std::error::Error;
-use std::fmt::Debug;
 use std::fs;
 use std::io::BufRead;
 use std::io;
@@ -47,7 +46,45 @@ macro_rules! example {
     }
 }
 
-pub fn main<A: Debug, F: FnOnce(&str) -> A>(year: u32, day: u32, run_fn: F) {
+pub trait Answer {
+    fn show(&self) -> String;
+}
+
+impl Answer for usize {
+    fn show(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Answer for u64 {
+    fn show(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Answer for i64 {
+    fn show(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Answer for String {
+    fn show(&self) -> String {
+        if self.contains('\n') {
+            "\n".to_owned() + self
+        } else {
+            self.to_owned()
+        }
+    }
+}
+
+impl<T, U> Answer for (T, U) where T: Answer, U: Answer {
+    fn show(&self) -> String {
+        format!("Part 1: {}\nPart 2: {}", self.0.show(), self.1.show())
+    }
+}
+
+pub fn main<A: Answer, F: FnOnce(&str) -> A>(year: u32, day: u32, run_fn: F) {
     let input = input(year, day);
 
     let start = Instant::now();
@@ -55,8 +92,8 @@ pub fn main<A: Debug, F: FnOnce(&str) -> A>(year: u32, day: u32, run_fn: F) {
     let duration = start.elapsed();
 
     println!(
-        "Answer to {} day {} ({}.{:03} s): {:?}",
-        year, day, duration.as_secs(), duration.subsec_millis(), answer);
+        "Answer to {} day {} ({}.{:03} s):\n{}",
+        year, day, duration.as_secs(), duration.subsec_millis(), answer.show());
 }
 
 pub fn input(year: u32, day: u32) -> String {
